@@ -25,7 +25,6 @@ jobs:
         git clone https://thinhpm:${{ secrets.HUGGINGFACE_TOKEN }}@huggingface.co/spaces/thinhpm/tele-be hf-space
         rsync -av --progress ./ hf-space/ --exclude .git
         cd hf-space
-        git status
         git branch
         git add .
         git commit -m "Deploying updated code from GitHub repository"
