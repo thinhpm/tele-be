@@ -11,7 +11,7 @@ jobs:
 
     steps:
     - name: Checkout code
-      uses: actions/checkout@v2
+      uses: actions/checkout@v3
 
     - name: Set up Git
       run: |
@@ -24,7 +24,7 @@ jobs:
       run: |
         git remote set-url origin https://thinhpm:${{ secrets.HUGGINGFACE_TOKEN }}@huggingface.co/spaces/thinhpm/tele-be
         git config --global credential.helper store
-        echo "https://${{ secrets.HUGGINGFACE_TOKEN }}:@huggingface.co" > ~/.git-credentials
+        echo "https://thinhpm:${{ secrets.HUGGINGFACE_TOKEN }}@huggingface.co" > ~/.git-credentials  # Fixed the credentials format
         git config --global pull.rebase true
     - name: Check the current branch
       run: |
@@ -36,12 +36,3 @@ jobs:
         git pull origin
         git push origin
         
-    - name: Set up Hugging Face API Request
-      env:
-        HUGGINGFACE_API_TOKEN: ${{ secrets.HUGGINGFACE_TOKEN }}
-      run: |
-        curl -X POST \
-          -H "Authorization: Bearer $HUGGINGFACE_API_TOKEN" \
-          -H "Content-Type: application/json" \
-          -d '{"request": "rebuild"}' \
-          https://api-inference/spaces/thinhpm/tele-be/trigger
