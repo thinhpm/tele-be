@@ -28,4 +28,4 @@ jobs:
 
     - name: Push to Hugging Face
       run: |
-        git push origin main --force-with-lease
+        git push hf origin main --force-with-lease
