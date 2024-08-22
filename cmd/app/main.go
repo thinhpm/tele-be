@@ -34,7 +34,7 @@ func main() {
 	cfg, err := config.LoadConfig()
 
 	if err != nil {
-		log.Fatalln("Fail to load config file: %v", err)
+		log.Fatalln("Faill to load config file: %v", err)
 	}
 
 	repo, err := repository.NewMongoDBRepository(cfg.MongoDBURI, cfg.Database, "accounts")
