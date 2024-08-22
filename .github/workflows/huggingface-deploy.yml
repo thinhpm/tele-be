@@ -35,3 +35,13 @@ jobs:
       run: |
         git pull origin
         git push origin
+        
+    - name: Set up Hugging Face API Request
+      env:
+        HUGGINGFACE_API_TOKEN: ${{ secrets.HUGGINGFACE_TOKEN }}
+      run: |
+        curl -X POST \
+          -H "Authorization: Bearer $HUGGINGFACE_API_TOKEN" \
+          -H "Content-Type: application/json" \
+          -d '{"request": "rebuild"}' \
+          https://api.huggingface.co/spaces/thinhpm/tele-be/trigger
