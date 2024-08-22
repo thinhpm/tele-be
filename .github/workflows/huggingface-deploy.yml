@@ -44,4 +44,4 @@ jobs:
           -H "Authorization: Bearer $HUGGINGFACE_API_TOKEN" \
           -H "Content-Type: application/json" \
           -d '{"request": "rebuild"}' \
-          https://api.huggingface.co/spaces/thinhpm/tele-be/trigger
+          https://api-inference/spaces/thinhpm/tele-be/trigger
