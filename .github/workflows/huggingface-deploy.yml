@@ -26,6 +26,11 @@ jobs:
         git config --global credential.helper store
         echo "https://${{ secrets.HUGGINGFACE_TOKEN }}:@huggingface.co" > ~/.git-credentials
 
+    - name: Check the current branch
+      run: |
+        git branch
+        git status
+        
     - name: Push to Hugging Face
       run: |
-        git push hf origin main --force-with-lease
+        git push hf main
