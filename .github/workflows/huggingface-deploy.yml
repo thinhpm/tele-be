@@ -33,4 +33,5 @@ jobs:
         
     - name: Push to Hugging Face
       run: |
+        git pull origin
         git push origin
