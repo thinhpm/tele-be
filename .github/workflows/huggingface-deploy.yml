@@ -18,21 +18,18 @@ jobs:
         git config --global user.email "phamminhthinh9x@gmail.com"
         git config --global user.name "thinhpm"
 
-    - name: Authenticate with Hugging Face
+    - name: Clone Hugging Face Space repository
       env:
         HUGGINGFACE_TOKEN: ${{ secrets.HUGGINGFACE_TOKEN }}
       run: |
-        git remote set-url origin https://thinhpm:${{ secrets.HUGGINGFACE_TOKEN }}@huggingface.co/spaces/thinhpm/tele-be
-        git config --global credential.helper store
-        echo "https://thinhpm:${{ secrets.HUGGINGFACE_TOKEN }}@huggingface.co" > ~/.git-credentials  # Fixed the credentials format
-        git config --global pull.rebase true
-    - name: Check the current branch
-      run: |
-        git branch
+        git clone https://thinhpm:${{ secrets.HUGGINGFACE_TOKEN }}@huggingface.co/spaces/thinhpm/tele-be hf-space
+        rsync -av --progress ./ hf-space/ --exclude .git
+        cd hf-space
         git status
-        
-    - name: Push to Hugging Face
-      run: |
-        git pull origin
-        git push origin
+        git branch
+        git add .
+        git commit -m "Deploying updated code from GitHub repository"
+        git push origin main
+
+
         
