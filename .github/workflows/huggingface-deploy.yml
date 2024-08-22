@@ -25,7 +25,7 @@ jobs:
         git remote set-url origin https://thinhpm:${{ secrets.HUGGINGFACE_TOKEN }}@huggingface.co/spaces/thinhpm/tele-be
         git config --global credential.helper store
         echo "https://${{ secrets.HUGGINGFACE_TOKEN }}:@huggingface.co" > ~/.git-credentials
-        
+        git config --global pull.rebase true
     - name: Check the current branch
       run: |
         git branch
