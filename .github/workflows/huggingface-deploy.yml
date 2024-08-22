@@ -1,4 +1,4 @@
-name: Deploy to Hugging Face Space
+name: Deploy to Hugging Face
 
 on:
   push:
@@ -10,17 +10,22 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-    - name: Checkout repository
-      uses: actions/checkout@v3
+    - name: Checkout code
+      uses: actions/checkout@v2
 
-    - name: Configure Git
+    - name: Set up Git
       run: |
         git config --global user.email "phamminhthinh9x@gmail.com"
         git config --global user.name "thinhpm"
 
-    - name: Push to Hugging Face Space
+    - name: Authenticate with Hugging Face
+      env:
+        HUGGINGFACE_TOKEN: ${{ secrets.HUGGINGFACE_TOKEN }}
       run: |
         git remote add hf https://huggingface.co/spaces/thinhpm/tele-be
-        git push hf main --force
-      env:
-        HUGGINGFACE_PAT: ${{ secrets.HUGGINGFACE_PAT }}
+        git config --global credential.helper store
+        echo "https://${{ secrets.HUGGINGFACE_TOKEN }}:@huggingface.co" > ~/.git-credentials
+
+    - name: Push to Hugging Face
+      run: |
+        git push hf main --force-with-lease
