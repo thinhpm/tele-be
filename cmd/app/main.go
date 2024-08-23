@@ -37,7 +37,7 @@ func main() {
 		log.Fatalln("Faill to load config file: %v", err)
 	}
 
-	repo, err := repository.NewMongoDBRepository(cfg.MongoDBURI, cfg.Database, "accounts")
+	repo, err := repository.NewMongoDBRepository(cfg.MongoDBURI, cfg.Database)
 
 	if err != nil {
 		log.Fatalln("Fail to connect db: %v", err)

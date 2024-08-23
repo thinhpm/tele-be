@@ -9,11 +9,11 @@ import (
 )
 
 type MongoDBRepository struct {
-	client     *mongo.Client
-	collection *mongo.Collection
+	client *mongo.Client
+	db     *mongo.Database
 }
 
-func NewMongoDBRepository(uri, dbName, collectionName string) (*MongoDBRepository, error) {
+func NewMongoDBRepository(uri, dbName) (*MongoDBRepository, error) {
 	clientOptions := options.Client().ApplyURI(uri)
 	client, err := mongo.Connect(context.TODO(), clientOptions)
 
@@ -29,13 +29,11 @@ func NewMongoDBRepository(uri, dbName, collectionName string) (*MongoDBRepositor
 		return nil, err
 	}
 	// log.Fatalln(dbName, collectionName)
-
-	collection := client.Database(dbName).Collection(collectionName)
-	// log.Fatalln(collection)
+	db := client.Database(dbName)
 
 	return &MongoDBRepository{
-		client:     client,
-		collection: collection,
+		client: client,
+		db:     db,
 	}, nil
 }
 
