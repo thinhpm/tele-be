@@ -13,7 +13,7 @@ type MongoDBRepository struct {
 	db     *mongo.Database
 }
 
-func NewMongoDBRepository(uri, dbName) (*MongoDBRepository, error) {
+func NewMongoDBRepository(uri, dbName string) (*MongoDBRepository, error) {
 	clientOptions := options.Client().ApplyURI(uri)
 	client, err := mongo.Connect(context.TODO(), clientOptions)
 
