@@ -8,16 +8,14 @@ import (
 	"go.mongodb.org/mongo-driver/mongo"
 )
 
-var collectionName = "accounts"
-
 func (repo *MongoDBRepository) GetGameByGameId(ctx context.Context, gameId string) *mongo.SingleResult {
-	collection := repo.db.Collection(collectionName)
+	collection := repo.db.Collection(collectionGames)
 	filter := bson.M{"game_id": gameId}
 	return collection.FindOne(ctx, filter)
 }
 
 func (repo *MongoDBRepository) GetAllGames(ctx context.Context) (*mongo.Cursor, error) {
-	collection := repo.db.Collection(collectionName)
+	collection := repo.db.Collection(collectionGames)
 	filter := bson.M{}
 	cursor, err := collection.Find(ctx, filter)
 

@@ -8,6 +8,9 @@ import (
 	"go.mongodb.org/mongo-driver/mongo/options"
 )
 
+var collectionSchedules = "schedules"
+var collectionGames = "accounts"
+
 type MongoDBRepository struct {
 	client *mongo.Client
 	db     *mongo.Database

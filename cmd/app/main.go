@@ -55,6 +55,8 @@ func main() {
 	r.HandleFunc("/api/v1/games", mongoHandler.GetAllGames).Methods("GET")
 	r.HandleFunc("/api/v1/games/{game_id}", mongoHandler.GetGameByGameId).Methods("GET")
 
+	r.HandleFunc("/api/v1/schedules", mongoHandler.GetAllSchedules).Methods("GET")
+
 	http.Handle("/", r)
 
 	port := os.Getenv("PORT")
