@@ -4,6 +4,7 @@ import (
 	"context"
 
 	"go.mongodb.org/mongo-driver/mongo"
+	"go.mongodb.org/mongo-driver/bson"
 )
 
 func (s *MongoDBService) GetGameByGameId(ctx context.Context, gameId string) *mongo.SingleResult {

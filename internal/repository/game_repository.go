@@ -29,9 +29,9 @@ func (repo *MongoDBRepository) GetAllGames(ctx context.Context) (*mongo.Cursor, 
 func (repo *MongoDBRepository) UpdateGameByGameId(ctx context.Context, gameId string, updates bson.M) (*mongo.UpdateResult, error) {
     collection := repo.db.Collection(collectionGames)
 	filter := bson.M{"game_id": gameId}
-	update := bson.M{"$set", updates}
+    update := bson.M{"$set": updates}
 
-	result, err := collection.UpdateOne(ctx, filter, update, options.Update().SetUpsert(false)) // SetUpsert(false) prevents inserting a new document if no match is found
+	result, err := collection.UpdateOne(ctx, filter, update)
 
     if err != nil {
 		log.Printf("Failed to update document with game_id %s: %v", gameId, err)

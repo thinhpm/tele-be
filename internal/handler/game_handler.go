@@ -9,6 +9,7 @@ import (
 	"be/internal/utils"
 
 	"github.com/gorilla/mux"
+	"go.mongodb.org/mongo-driver/bson"
 )
 
 func (h *MongoDBHandler) GetAllGames(w http.ResponseWriter, r *http.Request) {
@@ -109,7 +110,7 @@ func (h *MongoDBHandler) UpdateGameByGameId(w http.ResponseWriter, r *http.Reque
         updates[param.Key] = param.Value
     }
 
-    result, err := h.service.EditGameByGameId(r.Context(), game_id, updates)
+    result, err := h.service.UpdateGameByGameId(r.Context(), game_id, updates)
     if err != nil {
         log.Printf("Error updating game: %v", err)
         http.Error(w, "Failed to update game", http.StatusInternalServerError)
