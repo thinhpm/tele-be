@@ -76,3 +76,51 @@ func (h *MongoDBHandler) GetGameByGameId(w http.ResponseWriter, r *http.Request)
 
 	utils.WriteJsonResponse(w, http.StatusOK, game, "Success")
 }
+
+func (h *MongoDBHandler) UpdateGameByGameId(w http.ResponseWriter, r *http.Request) {
+    type Param struct {
+        Key   string `json:"key"`
+        Value string `json:"value"`
+    }
+    var params []Param
+    vars := mux.Vars(r)
+    game_id := ""
+
+    for key, value := range vars {
+        if key == "game_id" {
+            game_id = value
+            continue
+        }
+
+        param := Param{
+            Key:   key,
+            Value: value,
+        }
+        params = append(params, param)
+    }
+
+    if game_id == "" {
+        http.Error(w, "game_id not found", http.StatusInternalServerError)
+        return
+    }
+
+    updates := bson.M{}
+    for _, param := range params {
+        updates[param.Key] = param.Value
+    }
+
+    result, err := h.service.EditGameByGameId(r.Context(), game_id, updates)
+    if err != nil {
+        log.Printf("Error updating game: %v", err)
+        http.Error(w, "Failed to update game", http.StatusInternalServerError)
+        return
+    }
+
+    log.Printf("Matched %d documents and modified %d documents", result.MatchedCount, result.ModifiedCount)
+
+    if result.UpsertedCount > 0 {
+        log.Printf("Upserted document with ID: %v", result.UpsertedID)
+    }
+
+    utils.WriteJsonResponse(w, http.StatusOK, nil, "Success")
+}

@@ -13,3 +13,7 @@ func (s *MongoDBService) GetGameByGameId(ctx context.Context, gameId string) *mo
 func (s *MongoDBService) GetAllGames(ctx context.Context) (*mongo.Cursor, error) {
 	return s.repo.GetAllGames(ctx)
 }
+
+func (s *MongoDBService) UpdateGameByGameId(ctx context.Context, gameId string, updates bson.M) (*mongo.UpdateResult, error) {
+	return s.repo.UpdateGameByGameId(ctx, gameId, updates)
+}
