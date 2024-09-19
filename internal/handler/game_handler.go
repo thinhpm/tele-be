@@ -9,7 +9,7 @@ import (
 	"be/internal/utils"
 
 	"github.com/gorilla/mux"
-	"go.mongodb.org/mongo-driver/bson"
+	"encoding/json"
 )
 
 func (h *MongoDBHandler) GetAllGames(w http.ResponseWriter, r *http.Request) {
@@ -79,35 +79,24 @@ func (h *MongoDBHandler) GetGameByGameId(w http.ResponseWriter, r *http.Request)
 }
 
 func (h *MongoDBHandler) UpdateGameByGameId(w http.ResponseWriter, r *http.Request) {
-    type Param struct {
-        Key   string `json:"key"`
-        Value string `json:"value"`
-    }
-    var params []Param
     vars := mux.Vars(r)
-    game_id := ""
 
-    for key, value := range vars {
-        if key == "game_id" {
-            game_id = value
-            continue
-        }
-
-        param := Param{
-            Key:   key,
-            Value: value,
-        }
-        params = append(params, param)
-    }
-
+    game_id := vars["game_id"]
     if game_id == "" {
-        http.Error(w, "game_id not found", http.StatusInternalServerError)
+        http.Error(w, "Missing game_id in URL", http.StatusBadRequest)
         return
     }
 
-    updates := bson.M{}
-    for _, param := range params {
-        updates[param.Key] = param.Value
+    contentType := r.Header.Get("Content-Type")
+    if contentType != "application/json" {
+        http.Error(w, "Invalid Content-Type, expected application/json", http.StatusUnsupportedMediaType)
+        return
+    }
+
+    var updates map[string]interface{}
+    if err := json.NewDecoder(r.Body).Decode(&updates); err != nil {
+        http.Error(w, "Invalid JSON", http.StatusBadRequest)
+        return
     }
 
     result, err := h.service.UpdateGameByGameId(r.Context(), game_id, updates)
