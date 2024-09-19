@@ -3,6 +3,7 @@ package repository
 import (
 	"context"
 	"log"
+	"errors"
 
 	"go.mongodb.org/mongo-driver/bson"
 	"go.mongodb.org/mongo-driver/mongo"
@@ -28,7 +29,20 @@ func (repo *MongoDBRepository) GetAllGames(ctx context.Context) (*mongo.Cursor, 
 
 func (repo *MongoDBRepository) UpdateGameByGameId(ctx context.Context, gameId string, updates bson.M) (*mongo.UpdateResult, error) {
     collection := repo.db.Collection(collectionGames)
-	filter := bson.M{"game_id": gameId}
+
+    accountName, ok := updates["name"].(string)
+
+    if !ok {
+        return nil, errors.New("custom error: account name not found")
+    }
+
+	filter := bson.M{
+	    "game_id": gameId,
+	    "account.name": accountName,
+	}
+
+	delete(updates, "name")
+
     update := bson.M{"$set": updates}
 
 	result, err := collection.UpdateOne(ctx, filter, update)
